@@ -3,10 +3,13 @@ import React from 'react';
 
 import { GrafanaTheme2 } from '@grafana/data/src';
 import { selectors as e2eSelectors } from '@grafana/e2e-selectors/src';
+import { useTheme2 } from '@grafana/ui';
 import { useStyles2 } from '@grafana/ui/src';
 
 import { Branding } from '../../../../core/components/Branding/Branding';
 import { getLoginStyles } from '../../../../core/components/Login/LoginLayout';
+
+import { LOGO_DARK, LOGO_LIGHT } from '../../../../../customize';
 
 const selectors = e2eSelectors.pages.PublicDashboard.NotAvailable;
 
@@ -14,11 +17,12 @@ export const PublicDashboardNotAvailable = ({ paused }: { paused?: boolean }) =>
   const styles = useStyles2(getStyles);
   const loginStyles = useStyles2(getLoginStyles);
   const loginBoxBackground = Branding.LoginBoxBackground();
+  const theme = useTheme2();
 
   return (
     <Branding.LoginBackground className={styles.container} data-testid={selectors.container}>
       <div className={cx(styles.box, loginBoxBackground)}>
-        <Branding.LoginLogo className={loginStyles.loginLogo} />
+        <Branding.LoginLogo className={loginStyles.loginLogo} logo={theme.isDark ? LOGO_DARK : LOGO_LIGHT } />
         <p className={styles.title} data-testid={selectors.title}>
           {paused
             ? 'This dashboard has been paused by the administrator'

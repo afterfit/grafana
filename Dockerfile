@@ -35,7 +35,8 @@ ARG COMMIT_SHA=""
 ARG BUILD_BRANCH=""
 ARG GO_BUILD_TAGS="oss"
 ARG WIRE_TAGS="oss"
-ARG BINGO="true"
+# 20230704: build error when set BINGO="true", turn off
+ARG BINGO="false"
 
 # Install build dependencies
 RUN if grep -i -q alpine /etc/issue; then \
