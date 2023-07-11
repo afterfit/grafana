@@ -14,6 +14,8 @@ import {
 } from 'app/core/reducers/appNotification';
 import { useDispatch, useSelector } from 'app/types';
 
+import { t } from 'i18next'
+
 export function StoredNotifications() {
   const dispatch = useDispatch();
   const notifications = useSelector((state) => selectWarningsAndErrors(state.appNotifications));
@@ -66,7 +68,7 @@ export function StoredNotifications() {
     <div className={styles.wrapper}>
       <Alert
         severity="info"
-        title="This page displays past errors and warnings. Once dismissed, they cannot be retrieved."
+        title={t("notifications.alerts.title", "This page displays past errors and warnings. Once dismissed, they cannot be retrieved.")}
       />
       <div className={styles.topRow}>
         <Checkbox
@@ -74,7 +76,7 @@ export function StoredNotifications() {
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleAllCheckboxToggle(event.target.checked)}
         />
         <Button disabled={selectedNotificationIds.length === 0} onClick={clearSelectedNotifications}>
-          Dismiss notifications
+          {t("notifications.buttons.dismiss-notification", "Dismiss notifications")}
         </Button>
       </div>
       <ul className={styles.list}>

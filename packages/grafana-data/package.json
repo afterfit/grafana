@@ -58,7 +58,8 @@
     "tinycolor2": "1.6.0",
     "tslib": "2.5.0",
     "uplot": "1.6.24",
-    "xss": "^1.0.14"
+    "xss": "^1.0.14",
+    "i18next": "^22.0.0"
   },
   "devDependencies": {
     "@grafana/tsconfig": "^1.2.0-rc1",
