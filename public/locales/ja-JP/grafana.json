@@ -131,6 +131,14 @@
       "error": "オプションの読み込みに失敗しました",
       "loading": "オプションを読み込んでいます...",
       "no-options": "オプションが見つかりません"
+    },
+    "week-start-picker": {
+      "options": {
+        "monday": "月曜日",
+        "saturday": "土曜日",
+        "sunday": "日曜日",
+        "default": "デフォルト"
+      } 
     }
   },
   "library-panel": {
@@ -365,7 +373,13 @@
   },
   "notifications": {
     "starred-dashboard": "ダッシュボードにスターが付けられました",
-    "unstarred-dashboard": "ダッシュボードのスターが外されました"
+    "unstarred-dashboard": "ダッシュボードのスターが外されました",
+    "alerts": {
+      "title": "このページには過去のエラーと警告が表示されます。 一度削除すると、取り戻すことはできません。"
+    },
+    "buttons": {
+      "dismiss-notification": "通知をクリアする"
+    }
   },
   "panel": {
     "header-menu": {
@@ -614,7 +628,8 @@
     "created-at-column": "ログイン日時",
     "ip-column": "IPアドレス",
     "revoke": "ユーザーセッションを無効化",
-    "seen-at-column": "最終アクセス日時"
+    "seen-at-column": "最終アクセス日時",
+    "title": "セッション"
   },
   "user-sessions": {
     "loading": "セッションを読み込み中..."
@@ -634,6 +649,29 @@
     },
     "textbox": {
       "placeholder": "変数の値を入力"
+    }
+  },
+  "grafana-data": {
+    "datetime": {
+      "timezones": {
+        "default": "デフォルト",
+        "browser-time": "ブラウザ時",
+        "utc": "協定世界時"
+      }
+    }
+  },
+  "change-password-form": {
+    "old-password": "現在のパスワード",
+    "new-password": "新しいパスワード",
+    "confirm-password": "新しいパスワードの確認用",
+    "conform-change-password": "パスワード変更",
+    "cancel": "キャンセル",
+    "errors": {
+      "old-password-required": "現在のパスワードが必須です。",
+      "new-password-required": "新しいパスワードが必須です。",
+      "password-must-match": "入力されたパスワードが一致しません。",
+      "new-password-must-diff-old-password": "新しいパスワードを現在のパスワードと同じにすることはできません。",
+      "confirm-password-required": "新しいパスワードの確認用が必須です。"
     }
   }
 }

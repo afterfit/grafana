@@ -5,6 +5,8 @@ import { TimeZone } from '../types';
 
 import { getTimeZone } from './common';
 
+import { t } from 'i18next';
+
 export enum InternalTimeZones {
   default = '',
   localBrowserTime = 'browser',
@@ -104,7 +106,7 @@ const mapInternal = (zone: string, timestamp: number): TimeZoneInfo | undefined 
   switch (zone) {
     case InternalTimeZones.utc: {
       return {
-        name: 'Coordinated Universal Time',
+        name: t('grafana-data.datetime.timezones.utc', 'Coordinated Universal Time'),
         ianaName: 'UTC',
         zone,
         countries: [],
@@ -124,7 +126,7 @@ const mapInternal = (zone: string, timestamp: number): TimeZoneInfo | undefined 
         offsetInMins: 0,
         ...info,
         ianaName: (info as TimeZoneInfo).ianaName,
-        name: 'Default',
+        name: t('grafana-data.datetime.timezones.default', 'Default'),
         zone,
       };
     }
@@ -138,7 +140,7 @@ const mapInternal = (zone: string, timestamp: number): TimeZoneInfo | undefined 
         abbreviation: 'Your local time',
         offsetInMins: new Date().getTimezoneOffset(),
         ...info,
-        name: 'Browser Time',
+        name: t('grafana-data.datetime.timezones.browser-time', 'Browser Time'),
         ianaName: (info as TimeZoneInfo).ianaName,
         zone,
       };

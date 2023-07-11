@@ -243,11 +243,11 @@ const getStyles = stylesFactory(() => {
 function getTranslatedThemeName(theme: ThemeRegistryItem) {
   switch (theme.id) {
     case 'dark':
-      return t('shared.preferences.theme.dark-label', 'Dark');
+      return t('shared-preferences.theme.dark-label', 'Dark');
     case 'light':
-      return t('shared.preferences.theme.light-label', 'Light');
+      return t('shared-preferences.theme.light-label', 'Light');
     case 'system':
-      return t('shared.preferences.theme.system-label', 'System preference');
+      return t('shared-preferences.theme.system-label', 'System preference');
     default:
       return theme.name;
   }

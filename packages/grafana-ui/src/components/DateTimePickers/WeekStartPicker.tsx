@@ -5,6 +5,8 @@ import { selectors } from '@grafana/e2e-selectors';
 
 import { Select } from '../Select/Select';
 
+import { t } from '../../utils/i18n';
+
 export interface Props {
   onChange: (weekStart: string) => void;
   value: string;
@@ -16,10 +18,10 @@ export interface Props {
 }
 
 const weekStarts: Array<SelectableValue<string>> = [
-  { value: '', label: 'Default' },
-  { value: 'saturday', label: 'Saturday' },
-  { value: 'sunday', label: 'Sunday' },
-  { value: 'monday', label: 'Monday' },
+  { value: '', label: t('grafana-ui.week-start-picker.options.default', 'Default')},
+  { value: 'saturday', label: t('grafana-ui.week-start-picker.options.saturday', 'Saturday')}, 
+  { value: 'sunday', label: t('grafana-ui.week-start-picker.options.sunday', 'Sunday')},
+  { value: 'monday', label: t('grafana-ui.week-start-picker.options.monday', 'Monday')},
 ];
 
 export const WeekStartPicker = (props: Props) => {
