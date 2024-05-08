@@ -3,6 +3,7 @@ import React, { FC } from 'react';
 
 import { colorManipulator } from '@grafana/data';
 import { useTheme2, styleMixins } from '@grafana/ui';
+import { LOGO_DARK, LOGO_LIGHT } from 'customize';
 
 export interface BrandComponentProps {
   className?: string;
@@ -10,7 +11,8 @@ export interface BrandComponentProps {
 }
 
 export const LoginLogo: FC<BrandComponentProps & { logo?: string }> = ({ className, logo }) => {
-  return <img className={className} src={`${logo ? logo : 'public/img/grafana_icon.svg'}`} alt="Grafana" />;
+  const theme = useTheme2();
+  return <img className={className} src={`${logo ? logo : theme.isDark ? LOGO_DARK : LOGO_LIGHT}`} alt="Grafana" />;
 };
 
 const LoginBackground: FC<BrandComponentProps> = ({ className, children }) => {
@@ -43,7 +45,8 @@ const LoginBackground: FC<BrandComponentProps> = ({ className, children }) => {
 };
 
 const MenuLogo: FC<BrandComponentProps> = ({ className }) => {
-  return <img className={className} src="public/img/grafana_icon.svg" alt="Grafana" />;
+  const theme = useTheme2();
+  return <img className={className} src={theme.isDark ? LOGO_DARK : LOGO_LIGHT} alt="Grafana" />;
 };
 
 const LoginBoxBackground = () => {
@@ -59,8 +62,8 @@ export class Branding {
   static LoginBackground = LoginBackground;
   static MenuLogo = MenuLogo;
   static LoginBoxBackground = LoginBoxBackground;
-  static AppTitle = 'Grafana';
-  static LoginTitle = 'Welcome to Grafana';
+  static AppTitle = 'EMS Monitoring';
+  static LoginTitle = 'EMS Monitoring System';
   static GetLoginSubTitle = (): null | string => {
     return null;
   };
