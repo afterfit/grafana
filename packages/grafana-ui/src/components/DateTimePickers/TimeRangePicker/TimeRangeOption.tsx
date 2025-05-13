@@ -7,6 +7,8 @@ import { GrafanaTheme2, TimeOption } from '@grafana/data';
 import { useStyles2 } from '../../../themes/ThemeContext';
 import { getFocusStyles } from '../../../themes/mixins';
 
+import { t } from '../../../utils/i18n';
+
 const getStyles = (theme: GrafanaTheme2) => {
   return {
     container: css`
@@ -55,6 +57,8 @@ export const TimeRangeOption = memo<Props>(({ value, onSelect, selected = false,
   // In case there are more of the same timerange in the list
   const id = uuidv4();
 
+  const [key, fallback] = value.display.split('|');
+
   return (
     <li className={cx(styles.container, selected && styles.selected)}>
       <input
@@ -66,7 +70,7 @@ export const TimeRangeOption = memo<Props>(({ value, onSelect, selected = false,
         onChange={() => onSelect(value)}
       />
       <label className={styles.label} htmlFor={id}>
-        {value.display}
+        {t(key, fallback)}
       </label>
     </li>
   );
