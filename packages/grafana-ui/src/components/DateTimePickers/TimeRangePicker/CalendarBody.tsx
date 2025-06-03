@@ -9,23 +9,51 @@ import { Icon } from '../../Icon/Icon';
 
 import { TimePickerCalendarProps } from './TimePickerCalendar';
 
+import i18next from 'i18next';
+
 export function Body({ onChange, from, to, timeZone }: TimePickerCalendarProps) {
   const value = inputToValue(from, to);
   const onCalendarChange = useOnCalendarChange(onChange, timeZone);
   const styles = useStyles2(getBodyStyles);
+
+  const maxDate = React.useMemo(() => {
+    if (!from) {
+      return undefined;
+    }
+
+    const fromAsDate = from.toDate();
+    const fromAsValidDate = dateTime(fromAsDate).isValid() ? fromAsDate : new Date();
+    fromAsValidDate.setDate(fromAsValidDate.getDate() + 31)
+    
+    return fromAsValidDate;
+  }, [from]);
+
+  const minDate = React.useMemo(() => {
+    if (!from) {
+      return undefined;
+    }
+
+    const fromAsDate = from.toDate();
+    const fromAsValidDate = dateTime(fromAsDate).isValid() ? fromAsDate : new Date();
+    fromAsValidDate.setDate(fromAsValidDate.getDate() - 31)
+    
+    return fromAsValidDate;
+  }, [from]);
 
   return (
     <Calendar
       selectRange={true}
       next2Label={null}
       prev2Label={null}
+      minDate={minDate}
+      maxDate={maxDate}
       className={styles.body}
       tileClassName={styles.title}
       value={value}
       nextLabel={<Icon name="angle-right" />}
       prevLabel={<Icon name="angle-left" />}
       onChange={onCalendarChange}
-      locale="en"
+      locale={i18next.language}
     />
   );
 }

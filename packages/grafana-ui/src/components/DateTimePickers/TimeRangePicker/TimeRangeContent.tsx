@@ -15,7 +15,6 @@ import {
 } from '@grafana/data';
 import { selectors } from '@grafana/e2e-selectors';
 
-import { Icon, Tooltip } from '../..';
 import { useStyles2 } from '../../..';
 import { t, Trans } from '../../../utils/i18n';
 import { Button } from '../../Button';
@@ -43,6 +42,7 @@ interface InputState {
 const ERROR_MESSAGES = {
   default: () => t('time-picker.range-content.default-error', 'Please enter a past date or "now"'),
   range: () => t('time-picker.range-content.range-error', '"From" can\'t be after "To"'),
+  rangeGap31: () => t('time-picker.range-content.range-gap-31-error', 'The gap between "From" and "To" can\'t be more than 31 days'),
 };
 
 export const TimeRangeContent = (props: Props) => {
@@ -95,21 +95,6 @@ export const TimeRangeContent = (props: Props) => {
     }
   };
 
-  const fiscalYear = rangeUtil.convertRawToRange({ from: 'now/fy', to: 'now/fy' }, timeZone, fiscalYearStartMonth);
-  const fiscalYearMessage = t('time-picker.range-content.fiscal-year', 'Fiscal year');
-
-  const fyTooltip = (
-    <div className={style.tooltip}>
-      {rangeUtil.isFiscal(value) ? (
-        <Tooltip
-          content={`${fiscalYearMessage}: ${fiscalYear.from.format('MMM-DD')} - ${fiscalYear.to.format('MMM-DD')}`}
-        >
-          <Icon name="info-circle" />
-        </Tooltip>
-      ) : null}
-    </div>
-  );
-
   const icon = (
     <Button
       aria-label={selectors.components.TimePicker.calendar.openButton}
@@ -137,7 +122,6 @@ export const TimeRangeContent = (props: Props) => {
             value={from.value}
           />
         </Field>
-        {fyTooltip}
       </div>
       <div className={style.fieldContainer}>
         <Field label={t('time-picker.range-content.to-input', 'To')} invalid={to.invalid} error={to.errorMessage}>
@@ -150,7 +134,6 @@ export const TimeRangeContent = (props: Props) => {
             value={to.value}
           />
         </Field>
-        {fyTooltip}
       </div>
       <Button data-testid={selectors.components.TimePicker.applyTimeRange} type="button" onClick={onApply}>
         <Trans i18nKey="time-picker.range-content.apply-button">Apply time range</Trans>
@@ -174,7 +157,15 @@ export const TimeRangeContent = (props: Props) => {
 function isRangeInvalid(from: string, to: string, timezone?: string): boolean {
   const raw: RawTimeRange = { from, to };
   const timeRange = rangeUtil.convertRawToRange(raw, timezone);
-  const valid = timeRange.from.isSame(timeRange.to) || timeRange.from.isBefore(timeRange.to);
+  const valid = (timeRange.from.isSame(timeRange.to) || timeRange.from.isBefore(timeRange.to))
+
+  return !valid;
+}
+
+function isRangeGap31Invalid(from: string, to: string, timezone?: string): boolean {
+  const raw: RawTimeRange = { from, to };
+  const timeRange = rangeUtil.convertRawToRange(raw, timezone);
+  const valid = timeRange.to.diff(timeRange.from, 'days') <= 31; // Ensure the gap is <= 31 days
 
   return !valid;
 }
@@ -190,12 +181,22 @@ function valueToState(
   const toInvalid = !isValid(toValue, true, timeZone);
   // If "To" is invalid, we should not check the range anyways
   const rangeInvalid = isRangeInvalid(fromValue, toValue, timeZone) && !toInvalid;
+  const rangeGap31Invalid = !rangeInvalid && isRangeGap31Invalid(fromValue, toValue, timeZone);
+
+  let fromInvalidMessage = '';
+  if (fromInvalid) {
+    fromInvalidMessage = ERROR_MESSAGES.default();
+  } else if (rangeInvalid) {
+    fromInvalidMessage = ERROR_MESSAGES.range();
+  } else if (rangeGap31Invalid) {
+    fromInvalidMessage = ERROR_MESSAGES.rangeGap31();
+  }
 
   return [
     {
       value: fromValue,
-      invalid: fromInvalid || rangeInvalid,
-      errorMessage: rangeInvalid && !fromInvalid ? ERROR_MESSAGES.range() : ERROR_MESSAGES.default(),
+      invalid: fromInvalid || rangeInvalid || rangeGap31Invalid,
+      errorMessage: fromInvalidMessage,
     },
     { value: toValue, invalid: toInvalid, errorMessage: ERROR_MESSAGES.default() },
   ];

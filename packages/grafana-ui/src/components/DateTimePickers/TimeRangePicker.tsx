@@ -24,7 +24,10 @@ import { ToolbarButton } from '../ToolbarButton';
 import { Tooltip } from '../Tooltip/Tooltip';
 
 import { TimePickerContent } from './TimeRangePicker/TimePickerContent';
-import { quickOptions } from './options';
+import { mapQuickOptionToJPValue, quickOptions } from './options';
+
+import i18next from 'i18next';
+import { language } from '../../../../../public/app/plugins/datasource/parca/lang/lang';
 
 /** @public */
 export interface TimeRangePickerProps {
@@ -207,9 +210,12 @@ export const TimePickerButtonLabel = memo<LabelProps>(({ hideText, value, timeZo
     return null;
   }
 
+  const range = formattedRange(value, timeZone)
+  const displayRange = i18next.language.includes("ja") ? mapQuickOptionToJPValue[range] ?? range : range;
+
   return (
     <span className={styles.container}>
-      <span>{formattedRange(value, timeZone)}</span>
+      <span>{displayRange}</span>
       <span className={styles.utc}>{rangeUtil.describeTimeRangeAbbreviation(value, timeZone)}</span>
     </span>
   );

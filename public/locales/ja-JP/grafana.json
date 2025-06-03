@@ -564,6 +564,25 @@
       "recent-title": "最近使用した絶対時間範囲",
       "title": "絶対時間範囲"
     },
+    "quick-options": {
+      "now-5m": "過去5分",
+      "now-15m": "過去15分",
+      "now-30m": "過去30分",
+      "now-1h": "過去1時間",
+      "now-3h": "過去3時間",
+      "now-6h": "過去6時間",
+      "now-12h": "過去12時間",
+      "now-24h": "過去24時間",
+      "now-2d": "過去2日",
+      "now-7d": "過去7日",
+      "now-30d": "過去30日",
+      "now/d": "今日",
+      "now-1d/d": "昨日",
+      "now/w": "今週",
+      "now-1w/w": "先週",
+      "now/M": "今月",
+      "now-1M/M": "先月"
+    },
     "calendar": {
       "apply-button": "時間範囲を適用",
       "cancel-button": "キャンセル",
@@ -586,7 +605,8 @@
       "fiscal-year": "会計年度",
       "from-input": "開始",
       "range-error": "「開始」は「終了」より後にすることはできません",
-      "to-input": "終了"
+      "to-input": "終了",
+      "range-gap-31-error": "31日以上の範囲は選択できません"
     },
     "range-picker": {
       "backwards-time-aria-label": "時間範囲を後ろに移動",
