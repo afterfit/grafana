@@ -116,7 +116,7 @@ export const getLoginStyles = (theme: GrafanaTheme2) => {
       marginBottom: theme.spacing(2),
 
       [theme.breakpoints.up('sm')]: {
-        maxWidth: 100,
+        maxWidth: 200,
       },
     }),
     loginLogoWrapper: css({

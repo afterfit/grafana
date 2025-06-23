@@ -5,7 +5,8 @@ import { colorManipulator } from '@grafana/data';
 import { useTheme2 } from '@grafana/ui';
 import g8LoginDarkSvg from 'img/g8_login_dark.svg';
 import g8LoginLightSvg from 'img/g8_login_light.svg';
-import grafanaIconSvg from 'img/grafana_icon.svg';
+import shirokumaLogoDark from "img/shirokuma/logo-dark.png"
+import shirokumaLogoLight from "img/shirokuma/logo-light.png";
 
 export interface BrandComponentProps {
   className?: string;
@@ -13,7 +14,9 @@ export interface BrandComponentProps {
 }
 
 export const LoginLogo: FC<BrandComponentProps & { logo?: string }> = ({ className, logo }) => {
-  return <img className={className} src={`${logo ? logo : grafanaIconSvg}`} alt="Grafana" />;
+  const theme = useTheme2();
+
+  return <img className={className} src={`${logo ? logo : theme.isDark ? shirokumaLogoDark : shirokumaLogoLight}`} alt="shirokuma-logo" />;
 };
 
 const LoginBackground: FC<BrandComponentProps> = ({ className, children }) => {
@@ -46,7 +49,9 @@ const LoginBackground: FC<BrandComponentProps> = ({ className, children }) => {
 };
 
 const MenuLogo: FC<BrandComponentProps> = ({ className }) => {
-  return <img className={className} src={grafanaIconSvg} alt="Grafana" />;
+  const theme = useTheme2();
+
+  return <img className={className} src={theme.isDark ? shirokumaLogoDark : shirokumaLogoLight} alt="Grafana" />;
 };
 
 const LoginBoxBackground = () => {
@@ -62,8 +67,8 @@ export class Branding {
   static LoginBackground = LoginBackground;
   static MenuLogo = MenuLogo;
   static LoginBoxBackground = LoginBoxBackground;
-  static AppTitle = 'Grafana';
-  static LoginTitle = 'Welcome to Grafana';
+  static AppTitle = 'EMS Monitoring';
+  static LoginTitle = 'EMS Monitoring System';
   static HideEdition = false;
   static GetLoginSubTitle = (): null | string => {
     return null;
