@@ -10505,7 +10505,8 @@
       "from-input": "開始月",
       "open-input-calendar": "カレンダー",
       "range-error": "「開始月」を「終了月」より後にすることはできません",
-      "to-input": "終了月"
+      "to-input": "終了月",
+      "range-gap-31-error": "31日以上の範囲は選択できません"
     },
     "range-picker": {
       "backwards-time-aria-label": "時間範囲を後ろに移動",

@@ -1,9 +1,10 @@
 import { css } from '@emotion/css';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import Calendar, { CalendarType } from 'react-calendar';
 
-import { GrafanaTheme2, dateTimeParse, DateTime, TimeZone } from '@grafana/data';
+import { GrafanaTheme2, dateTimeParse, dateTime, DateTime, TimeZone } from '@grafana/data';
 import { t } from '@grafana/i18n';
+import i18next from 'i18next';
 
 import { useStyles2 } from '../../../themes/ThemeContext';
 import { Icon } from '../../Icon/Icon';
@@ -24,6 +25,30 @@ export function Body({ onChange, from, to, timeZone, weekStart }: TimePickerCale
   const styles = useStyles2(getBodyStyles);
   const weekStartValue = getWeekStart(weekStart);
 
+  const maxDate = useMemo(() => {
+    if (!from) {
+      return undefined;
+    }
+
+    const fromAsDate = from.toDate();
+    const fromAsValidDate = dateTime(fromAsDate).isValid() ? fromAsDate : new Date();
+    fromAsValidDate.setDate(fromAsValidDate.getDate() + 31)
+    
+    return fromAsValidDate;
+  }, [from]);
+
+  const minDate = useMemo(() => {
+    if (!from) {
+      return undefined;
+    }
+
+    const fromAsDate = from.toDate();
+    const fromAsValidDate = dateTime(fromAsDate).isValid() ? fromAsDate : new Date();
+    fromAsValidDate.setDate(fromAsValidDate.getDate() - 31)
+    
+    return fromAsValidDate;
+  }, [from]);
+
   return (
     <Calendar
       selectRange={true}
@@ -32,12 +57,14 @@ export function Body({ onChange, from, to, timeZone, weekStart }: TimePickerCale
       className={styles.body}
       tileClassName={styles.title}
       value={value}
+      minDate={minDate}
+      maxDate={maxDate}
       nextLabel={<Icon name="angle-right" />}
       nextAriaLabel={t('time-picker.calendar.next-month', 'Next month')}
       prevLabel={<Icon name="angle-left" />}
       prevAriaLabel={t('time-picker.calendar.previous-month', 'Previous month')}
       onChange={onCalendarChange}
-      locale="en"
+      locale={i18next.language}
       calendarType={weekStartMap[weekStartValue]}
     />
   );
