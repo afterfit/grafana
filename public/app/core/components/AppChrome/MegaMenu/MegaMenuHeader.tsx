@@ -34,7 +34,7 @@ export function MegaMenuHeader({ handleMegaMenu, handleDockedMenu, onClose }: Pr
           onClick={handleMegaMenu}
           tooltip={t('navigation.megamenu.close', 'Close menu')}
         >
-          <Branding.MenuLogo className={styles.img} />
+          <Branding.MenuLogo className={styles.img} showMiniVer={true} />
         </ToolbarButton>
         <OrganizationSwitcher />
       </Stack>

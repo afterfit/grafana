@@ -1,5 +1,5 @@
 import { css, cx } from '@emotion/css';
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 
 import { colorManipulator } from '@grafana/data';
 import { useTheme2 } from '@grafana/ui';
@@ -7,9 +7,12 @@ import g8LoginDarkSvg from 'img/g8_login_dark.svg';
 import g8LoginLightSvg from 'img/g8_login_light.svg';
 import shirokumaLogoDark from "img/shirokuma/logo-dark.png"
 import shirokumaLogoLight from "img/shirokuma/logo-light.png";
+import shirokumaMiniLogoDark from "img/shirokuma/mini-logo-dark.png"
+import shirokumaMiniLogoLight from "img/shirokuma/mini-logo-light.png";
 
 export interface BrandComponentProps {
   className?: string;
+  showMiniVer?: boolean;
   children?: JSX.Element | JSX.Element[];
 }
 
@@ -48,10 +51,17 @@ const LoginBackground: FC<BrandComponentProps> = ({ className, children }) => {
   return <div className={cx(background, className)}>{children}</div>;
 };
 
-const MenuLogo: FC<BrandComponentProps> = ({ className }) => {
+const MenuLogo: FC<BrandComponentProps> = ({ className, showMiniVer }) => {
   const theme = useTheme2();
 
-  return <img className={className} src={theme.isDark ? shirokumaLogoDark : shirokumaLogoLight} alt="Grafana" />;
+  const logo = useMemo(() => {
+    if (showMiniVer) {
+      return theme.isDark ? shirokumaMiniLogoDark : shirokumaMiniLogoLight
+    }
+    return theme.isDark ? shirokumaLogoDark : shirokumaLogoLight
+  }, [theme.isDark, showMiniVer]);
+
+  return <img className={className} src={logo} alt="Grafana" />;
 };
 
 const LoginBoxBackground = () => {
