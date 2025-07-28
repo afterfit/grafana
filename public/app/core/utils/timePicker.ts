@@ -8,22 +8,24 @@ export const getShiftedTimeRange = (direction: number, origRange: TimeRange): Ab
     to: toUtc(origRange.to),
   };
 
-  const timespan = range.to.valueOf() - range.from.valueOf();
+  const toValue = range.to.valueOf();
+  const fromValue = range.from.valueOf();
+  const timespan = toValue - fromValue;
   let to: number, from: number;
 
   if (direction === -1) {
-    to = range.to.valueOf() - timespan;
-    from = range.from.valueOf() - timespan;
+    to = toValue - timespan;
+    from = fromValue - timespan;
   } else if (direction === 1) {
-    to = range.to.valueOf() + timespan;
-    from = range.from.valueOf() + timespan;
-    if (to > Date.now() && range.to.valueOf() < Date.now()) {
+    to = toValue + timespan;
+    from = fromValue + timespan;
+    if (to > Date.now() && toValue < Date.now()) {
       to = Date.now();
-      from = range.from.valueOf();
+      from = fromValue;
     }
   } else {
-    to = range.to.valueOf();
-    from = range.from.valueOf();
+    to = toValue;
+    from = fromValue;
   }
 
   return { from, to };
