@@ -1,5 +1,5 @@
 import { css } from '@emotion/css';
-import { FormEvent, useCallback, useEffect, useId, useState } from 'react';
+import { FormEvent, useCallback, useEffect, useId, useState, useRef } from 'react';
 import * as React from 'react';
 
 import {
@@ -63,6 +63,8 @@ export const TimeRangeContent = (props: Props) => {
   const [fromValue, toValue] = valueToState(value.raw.from, value.raw.to, timeZone);
   const style = useStyles2(getStyles);
 
+  const prevOpenCalendarValuesRef = useRef<{ from: InputState; to: InputState }>({ from: fromValue, to: toValue });
+
   const [from, setFrom] = useState<InputState>(fromValue);
   const [to, setTo] = useState<InputState>(toValue);
   const [isOpen, setOpen] = useState(false);
@@ -81,9 +83,31 @@ export const TimeRangeContent = (props: Props) => {
     (event: FormEvent<HTMLElement>) => {
       event.preventDefault();
       setOpen(true);
+
+      // Store current values to be able to reset if user did not select a full range (from + to)
+      prevOpenCalendarValuesRef.current = { from, to };
+
+      // Reset the from, to values in the calendar when opening the calendar
+      setFrom({
+        ...from,
+        value: ""
+      })
+      setTo({...to,
+        value: ""
+      })
     },
-    [setOpen]
+    [setOpen, from, to]
   );
+
+  const onClose = useCallback(() => {
+    setOpen(false);
+
+    // * Reset calendar selection if user did not select a full range (from + to)
+    if (from.value === "" || to.value === "") {
+      setFrom(prevOpenCalendarValuesRef.current.from);
+      setTo(prevOpenCalendarValuesRef.current.to);
+    }
+  }, [setOpen, from, to]);
 
   const onApply = useCallback(() => {
     if (to.invalid || from.invalid) {
@@ -101,8 +125,13 @@ export const TimeRangeContent = (props: Props) => {
       const [fromValue, toValue] = valueToState(from, to, timeZone);
       setFrom(fromValue);
       setTo(toValue);
+
+      if (fromValue.value && toValue.value) {
+        // * Close the calendar
+        setOpen(false);
+      }
     },
-    [timeZone]
+    [timeZone, setOpen]
   );
 
   const submitOnEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -205,7 +234,7 @@ export const TimeRangeContent = (props: Props) => {
         from={dateTimeParse(from.value, { timeZone })}
         to={dateTimeParse(to.value, { timeZone })}
         onApply={onApply}
-        onClose={() => setOpen(false)}
+        onClose={onClose}
         onChange={onChange}
         timeZone={timeZone}
         isReversed={isReversed}
@@ -237,29 +266,38 @@ function valueToState(
   timeZone?: TimeZone
 ): [InputState, InputState] {
   const fromValue = valueAsString(rawFrom, timeZone);
-  const toValue = valueAsString(rawTo, timeZone);
   const fromInvalid = !isValid(fromValue, false, timeZone);
-  const toInvalid = !isValid(toValue, true, timeZone);
-  // If "To" is invalid, we should not check the range anyways
-  const rangeInvalid = isRangeInvalid(fromValue, toValue, timeZone) && !toInvalid;
-  const rangeGap31Invalid = !rangeInvalid && isRangeGap31Invalid(fromValue, toValue, timeZone);
 
-  let fromInvalidMessage = '';
-  if (fromInvalid) {
-    fromInvalidMessage = ERROR_MESSAGES.default();
-  } else if (rangeInvalid) {
-    fromInvalidMessage = ERROR_MESSAGES.range();
-  } else if (rangeGap31Invalid) {
-    fromInvalidMessage = ERROR_MESSAGES.rangeGap31();
+  // Only check if toValue is not empty string
+  if (rawTo) {
+    const toValue = valueAsString(rawTo, timeZone);
+    const toInvalid = !isValid(toValue, true, timeZone);
+    // If "To" is invalid, we should not check the range anyways
+    const rangeInvalid = isRangeInvalid(fromValue, toValue, timeZone) && !toInvalid;
+    const rangeGap31Invalid = !rangeInvalid && isRangeGap31Invalid(fromValue, toValue, timeZone);
+
+    let fromInvalidMessage = '';
+    if (fromInvalid) {
+      fromInvalidMessage = ERROR_MESSAGES.default();
+    } else if (rangeInvalid) {
+      fromInvalidMessage = ERROR_MESSAGES.range();
+    } else if (rangeGap31Invalid) {
+      fromInvalidMessage = ERROR_MESSAGES.rangeGap31();
+    }
+
+    return [
+      {
+        value: fromValue,
+        invalid: fromInvalid || rangeInvalid || rangeGap31Invalid,
+        errorMessage: fromInvalidMessage,
+      },
+      { value: toValue, invalid: toInvalid, errorMessage: ERROR_MESSAGES.default() },
+    ];
   }
-
+  
   return [
-    {
-      value: fromValue,
-      invalid: fromInvalid || rangeInvalid || rangeGap31Invalid,
-      errorMessage: fromInvalidMessage,
-    },
-    { value: toValue, invalid: toInvalid, errorMessage: ERROR_MESSAGES.default() },
+    { value: fromValue, invalid: fromInvalid, errorMessage: ERROR_MESSAGES.default() },
+    { value: "", invalid: false, errorMessage: ERROR_MESSAGES.default() },
   ];
 }
 

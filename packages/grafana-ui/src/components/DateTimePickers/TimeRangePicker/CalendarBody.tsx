@@ -26,7 +26,7 @@ export function Body({ onChange, from, to, timeZone, weekStart }: TimePickerCale
   const weekStartValue = getWeekStart(weekStart);
 
   const maxDate = useMemo(() => {
-    if (!from) {
+    if (!from || !from.isValid()) {
       return undefined;
     }
 
@@ -38,7 +38,7 @@ export function Body({ onChange, from, to, timeZone, weekStart }: TimePickerCale
   }, [from]);
 
   const minDate = useMemo(() => {
-    if (!from) {
+    if (!from || !from.isValid()) {
       return undefined;
     }
 
@@ -66,8 +66,9 @@ export function Body({ onChange, from, to, timeZone, weekStart }: TimePickerCale
       onChange={onCalendarChange}
       locale={i18next.language}
       calendarType={weekStartMap[weekStartValue]}
+      allowPartialRange={true}
     />
-  );
+  );0
 }
 
 Body.displayName = 'Body';
@@ -100,10 +101,9 @@ function useOnCalendarChange(onChange: (from: DateTime, to: DateTime) => void, t
         return console.error('onCalendarChange: should be run in selectRange={true}');
       }
 
-      if (value[0] && value[1]) {
+      if (value[0]) {
         const from = dateTimeParse(dateInfo(value[0]), { timeZone });
-        const to = dateTimeParse(dateInfo(value[1]), { timeZone });
-
+        const to = value[1] ? dateTimeParse(dateInfo(value[1]), { timeZone }) : "";
         onChange(from, to);
       }
     },
