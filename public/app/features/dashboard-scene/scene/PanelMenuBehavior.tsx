@@ -422,16 +422,18 @@ function getInspectMenuItem(
       });
     }
   }
-
-  inspectSubMenu.push({
-    text: t('panel.header-menu.inspect-json', `Panel JSON`),
-    href: getInspectUrl(panel, InspectTab.JSON),
-    onClick: (e) => {
-      e.preventDefault();
-      locationService.partial({ inspect: panel.state.key, inspectTab: InspectTab.JSON });
-    },
-  });
-
+  
+  if (dashboard instanceof DashboardScene && dashboard.state.meta.canEdit){
+    inspectSubMenu.push({
+      text: t('panel.header-menu.inspect-json', `Panel JSON`),
+      href: getInspectUrl(panel, InspectTab.JSON),
+      onClick: (e) => {
+        e.preventDefault();
+        locationService.partial({ inspect: panel.state.key, inspectTab: InspectTab.JSON });
+      },
+    });
+  }
+  
   return {
     text: t('panel.header-menu.inspect', `Inspect`),
     iconClassName: 'info-circle',
