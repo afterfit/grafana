@@ -167,25 +167,28 @@ export function panelMenuBehavior(menu: VizPanelMenu) {
           },
         });
       }
-
-      items.push({
-        type: 'submenu',
-        text: t('panel.header-menu.share', 'Share'),
-        iconClassName: 'share-alt',
-        subMenu,
-        onClick: (e) => {
-          e.preventDefault();
-        },
-      });
+      if (dashboard.state.meta.canEdit){
+        items.push({
+          type: 'submenu',
+          text: t('panel.header-menu.share', 'Share'),
+          iconClassName: 'share-alt',
+          subMenu,
+          onClick: (e) => {
+            e.preventDefault();
+          },
+        });
+      }
     } else {
-      items.push({
-        text: t('panel.header-menu.share', 'Share'),
-        iconClassName: 'share-alt',
-        onClick: () => {
-          dashboard.showModal(new ShareModal({ panelRef: panel.getRef() }));
-        },
-        shortcut: 'p s',
-      });
+      if (dashboard.state.meta.canEdit){
+        items.push({
+          text: t('panel.header-menu.share', 'Share'),
+          iconClassName: 'share-alt',
+          onClick: () => {
+            dashboard.showModal(new ShareModal({ panelRef: panel.getRef() }));
+          },
+          shortcut: 'p s',
+        });
+      }
     }
 
     if (dashboard.state.isEditing && !isReadOnlyRepeat && !isEditingPanel) {
@@ -346,7 +349,7 @@ export function panelMenuBehavior(menu: VizPanelMenu) {
       }
     }
 
-    if (moreSubMenu.length) {
+    if (moreSubMenu.length && dashboard.state.meta.canEdit) {
       items.push({
         type: 'submenu',
         text: t('panel.header-menu.more', `More...`),

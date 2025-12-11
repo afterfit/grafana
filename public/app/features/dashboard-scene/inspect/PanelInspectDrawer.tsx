@@ -65,20 +65,22 @@ export class PanelInspectDrawer extends SceneObjectBase<PanelInspectDrawerState>
     }
 
     if (panelRef) {
+      const dashboard = getDashboardSceneFor(this);
       if (supportsDataQuery(plugin)) {
         const data = sceneGraph.getData(panelRef.resolve());
 
         tabs.push(new InspectDataTab({ panelRef }));
-        tabs.push(new InspectStatsTab({ panelRef }));
-        tabs.push(new InspectQueryTab({ panelRef }));
-
+        if (dashboard.state.meta.canEdit){
+          tabs.push(new InspectStatsTab({ panelRef }));
+          tabs.push(new InspectQueryTab({ panelRef }));
+        }
+        
         const dsWithInspector = await getDataSourceWithInspector(data.state.data);
         if (dsWithInspector) {
           tabs.push(new InspectMetaDataTab({ panelRef, dataSource: dsWithInspector }));
         }
       }
 
-      const dashboard = getDashboardSceneFor(this);
       if (dashboard.state.meta.canEdit) {
         tabs.push(new InspectJsonTab({ panelRef, onClose: this.onClose }));
       }
