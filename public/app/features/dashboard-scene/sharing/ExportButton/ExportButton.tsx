@@ -3,6 +3,7 @@ import { useCallback, useState } from 'react';
 import { selectors as e2eSelectors } from '@grafana/e2e-selectors';
 import { Trans, t } from '@grafana/i18n';
 import { Button, ButtonGroup, Dropdown, Icon } from '@grafana/ui';
+import { contextSrv } from 'app/core/core';
 
 import { DashboardScene } from '../../scene/DashboardScene';
 
@@ -15,6 +16,9 @@ interface Props {
 }
 
 export default function ExportButton({ dashboard }: Props) {
+  if (contextSrv.hasRole('Viewer')) {
+    return null;
+  }
   const [isOpen, setIsOpen] = useState(false);
 
   const onMenuClick = useCallback((isOpen: boolean) => {

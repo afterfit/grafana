@@ -159,10 +159,12 @@ export function getPanelMenu(
     }
   }
 
-  inspectMenu.push({
-    text: t('panel.header-menu.inspect-json', `Panel JSON`),
-    onClick: (e: React.MouseEvent) => onInspectPanel(InspectTab.JSON),
-  });
+  if (dashboard.meta.canEdit) {
+    inspectMenu.push({
+      text: t('panel.header-menu.inspect-json', `Panel JSON`),
+      onClick: (e: React.MouseEvent) => onInspectPanel(InspectTab.JSON),
+    });
+  }
 
   menu.push({
     type: 'submenu',

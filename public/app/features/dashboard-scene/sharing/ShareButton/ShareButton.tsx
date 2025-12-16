@@ -7,6 +7,7 @@ import { selectors as e2eSelectors } from '@grafana/e2e-selectors';
 import { Trans, t } from '@grafana/i18n';
 import { VizPanel } from '@grafana/scenes';
 import { Button, ButtonGroup, Dropdown, useStyles2 } from '@grafana/ui';
+import { contextSrv } from 'app/core/core';
 
 import { DashboardScene } from '../../scene/DashboardScene';
 import { DashboardInteractions } from '../../utils/interactions';
@@ -17,6 +18,9 @@ import { buildShareUrl } from './utils';
 const newShareButtonSelector = e2eSelectors.pages.Dashboard.DashNav.newShareButton;
 
 export default function ShareButton({ dashboard, panel }: { dashboard: DashboardScene; panel?: VizPanel }) {
+  if (contextSrv.hasRole('Viewer')) {
+    return null;
+  }
   const styles = useStyles2(getStyles);
   const [isOpen, setIsOpen] = useState(false);
 
