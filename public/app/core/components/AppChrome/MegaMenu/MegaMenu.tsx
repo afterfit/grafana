@@ -9,10 +9,12 @@ import { t } from '@grafana/i18n';
 import { config, reportInteraction } from '@grafana/runtime';
 import { ScrollContainer, useStyles2 } from '@grafana/ui';
 import { useGrafana } from 'app/core/context/GrafanaContext';
+import { contextSrv } from 'app/core/core';
 import { setBookmark } from 'app/core/reducers/navBarTree';
 import { usePatchUserPreferencesMutation } from 'app/features/preferences/api/index';
 import { useDispatch, useSelector } from 'app/types';
 
+import { Footer } from '../../Footer/Footer';
 import { InviteUserButton } from '../../InviteUserButton/InviteUserButton';
 import { shouldRenderInviteUserButton } from '../../InviteUserButton/utils';
 
@@ -39,8 +41,11 @@ export const MegaMenu = memo(
     const pinnedItems = usePinnedItems();
 
     // Remove profile + help from tree
+    // Hide alerting for viewer role
+    const isViewer = contextSrv.hasRole('Viewer');
     const navItems = navTree
       .filter((item) => item.id !== 'profile' && item.id !== 'help')
+      .filter((item) => !(isViewer && item.id === 'alerting'))
       .map((item) => enrichWithInteractionTracking(item, state.megaMenuDocked));
 
     if (config.featureToggles.pinNavItems) {
@@ -133,6 +138,7 @@ export const MegaMenu = memo(
               <InviteUserButton />
             </div>
           )}
+          <Footer />
         </nav>
       </div>
     );

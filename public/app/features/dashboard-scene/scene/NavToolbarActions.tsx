@@ -601,14 +601,15 @@ export function ToolbarActions({ dashboard }: Props) {
 function renderActionElements(toolbarActions: ToolbarAction[]) {
   const actionElements: ReactNode[] = [];
   let lastGroup = '';
+  const isViewer = !contextSrv.isEditor && !contextSrv.isGrafanaAdmin;
 
   for (const action of toolbarActions) {
     if (!action.condition) {
       continue;
     }
 
-    if (lastGroup && lastGroup !== action.group) {
-      lastGroup && actionElements.push(<NavToolbarSeparator key={`${action.group}-separator`} />);
+    if (lastGroup && lastGroup !== action.group && !isViewer) {
+      actionElements.push(<NavToolbarSeparator key={`${action.group}-separator`} />);
     }
 
     actionElements.push(action.render());

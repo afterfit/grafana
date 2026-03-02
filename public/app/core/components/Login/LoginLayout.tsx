@@ -8,6 +8,7 @@ import { useStyles2 } from '@grafana/ui';
 
 import { Branding } from '../Branding/Branding';
 import { BrandingSettings } from '../Branding/types';
+import { Footer } from '../Footer/Footer';
 
 interface InnerBoxProps {
   enterAnimation?: boolean;
@@ -30,7 +31,6 @@ export const LoginLayout = ({ children, branding, isChangingPassword }: React.Pr
   const loginTitle = branding?.loginTitle ?? Branding.LoginTitle;
   const loginBoxBackground = branding?.loginBoxBackground || Branding.LoginBoxBackground();
   const loginLogo = branding?.loginLogo;
-  const hideEdition = branding?.hideEdition ?? Branding.HideEdition;
 
   useEffect(() => setStartAnim(true), []);
 
@@ -57,6 +57,7 @@ export const LoginLayout = ({ children, branding, isChangingPassword }: React.Pr
           </div>
           <div className={loginStyles.loginOuterBox}>{children}</div>
         </div>
+        <Footer />
       </div>
     </Branding.LoginBackground>
   );

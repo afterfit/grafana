@@ -35,12 +35,15 @@ export function ProfileButton({ profileNode, onToggleKioskMode }: Props) {
         {config.featureToggles.grafanaconThemes && (
           <MenuItem icon="palette" onClick={onToggleThemeDrawer} label={t('profile.change-theme', 'Change theme')} />
         )}
-        <Menu.Item
-          icon="monitor"
-          onClick={onToggleKioskMode}
-          label={t('profile.enable-kiosk-mode', 'Enable kiosk mode')}
-        />
-        {config.newsFeedEnabled && (
+        {/* Hide kiosk mode and blog for viewer role */}
+        {!contextSrv.hasRole('Viewer') && (
+          <Menu.Item
+            icon="monitor"
+            onClick={onToggleKioskMode}
+            label={t('profile.enable-kiosk-mode', 'Enable kiosk mode')}
+          />
+        )}
+        {config.newsFeedEnabled && !contextSrv.hasRole('Viewer') && (
           <MenuItem
             icon="rss"
             onClick={onToggleShowNewsDrawer}
