@@ -77,7 +77,7 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.2",
-    "@babel/core": "7.26.10",
+    "@babel/core": "7.29.6",
     "@babel/preset-env": "7.26.9",
     "@babel/runtime": "7.27.0",
     "@betterer/betterer": "5.4.0",
