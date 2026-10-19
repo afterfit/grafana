@@ -18,7 +18,7 @@ require (
 	github.com/dlclark/regexp2 v1.12.0 // indirect
 	github.com/emicklei/proto v1.14.3 // indirect
 	github.com/fatih/color v1.19.0 // indirect
-	github.com/getkin/kin-openapi v0.146.0 // indirect
+	github.com/getkin/kin-openapi v0.149.0 // indirect
 	github.com/go-openapi/jsonpointer v1.0.0 // indirect
 	github.com/goccy/go-yaml v1.19.2 // indirect
 	github.com/golang/glog v1.2.5 // indirect
